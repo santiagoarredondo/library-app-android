@@ -18,8 +18,8 @@ public class BookListActivity extends AppCompatActivity {
             {"Cien años de soledad", "gabo", "123134", "spanish", "norma"},
             {"A","A","A","A","A"}
     };
+    int[] imgData = {R.drawable.cienanios, R.drawable.booka};
 
-    int[] imgData = {R.drawable.cienanios, R.drawable.bookshelf};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +29,7 @@ public class BookListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setImageResource(R.drawable.plus);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

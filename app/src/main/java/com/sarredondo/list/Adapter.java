@@ -61,6 +61,7 @@ public class Adapter extends BaseAdapter {
         isbn.setText(data[position][2]);
         language.setText(data[position][3]);
         publisher.setText(data[position][4 ]);
+        image.setImageResource((Integer)imgData[position]);
 
         image.setTag(position);
 
