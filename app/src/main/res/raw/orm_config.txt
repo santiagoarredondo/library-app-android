@@ -1,0 +1,39 @@
+#
+# generated on 2019/02/26 08:30:33
+#
+# --table-start--
+dataClass=com.sarredondo.datasource.Book
+tableName=book
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=name
+canBeNull=false
+indexName=book_name_idx
+# --field-end--
+# --field-start--
+fieldName=author
+# --field-end--
+# --field-start--
+fieldName=ISBN
+# --field-end--
+# --field-start--
+fieldName=language
+# --field-end--
+# --field-start--
+fieldName=publisher
+# --field-end--
+# --field-start--
+fieldName=imgPath
+# --field-end--
+# --field-start--
+fieldName=img
+dataPersister=BYTE_ARRAY
+columnDefinition=LONGBLOB
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
