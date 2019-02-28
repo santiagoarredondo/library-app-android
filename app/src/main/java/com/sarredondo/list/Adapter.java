@@ -2,16 +2,26 @@ package com.sarredondo.list;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Icon;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.j256.ormlite.dao.Dao;
+import com.sarredondo.datasource.Book;
 import com.sarredondo.finalapp.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PipedOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Adapter extends BaseAdapter {
 
@@ -19,26 +29,29 @@ public class Adapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
 
     Context context;
-    //ArrayList<Book> lstBooks = new ArrayList<Book>();
+    ArrayList<Book> books = new ArrayList<Book>();
+    ArrayList<Integer> images = new ArrayList<Integer>();
     String[][] data;
     int[] imgData;
+    public byte[] currentImage;
 
-    public Adapter(Context context, String[][] data, int[] imgData) {
+
+    public Adapter(Context context, ArrayList<Book> books, ArrayList<Integer> images) {
         this.context = context;
-        this.data = data;
-        this.imgData = imgData;
+        this.books = books;
+        this.images = images;
         // instancia el xml
         inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return data.length;
+        return books.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return books.get(position);
     }
 
     @Override
@@ -47,7 +60,7 @@ public class Adapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final View view = inflater.inflate(R.layout.list_element, null);
         TextView title = (TextView) view.findViewById(R.id.txtTitle);
         TextView author = (TextView) view.findViewById(R.id.txtAuthor);
@@ -56,25 +69,56 @@ public class Adapter extends BaseAdapter {
         TextView publisher = (TextView) view.findViewById(R.id.txtPublisher);
         ImageView image = (ImageView) view.findViewById(R.id.imgBook);
         // llenar la lista
-        title.setText(data[position][0]);
-        author.setText(data[position][1]);
-        isbn.setText(data[position][2]);
-        language.setText(data[position][3]);
-        publisher.setText(data[position][4 ]);
-        image.setImageResource((Integer)imgData[position]);
+        final Book currentBook = books.get(position);
+        title.setText(currentBook.getName());
+        author.setText(currentBook.getAuthor());
+        isbn.setText(currentBook.getISBN());
+        language.setText(currentBook.getLanguage());
+        publisher.setText(currentBook.getPublisher());
+        try {
+            byte[] byteArray = currentBook.getImg();
+            Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            image.setImageBitmap(bmp);
 
-        image.setTag(position);
+        } catch (Exception e) {
+            image.setImageResource(R.drawable.noimage);
+        }
 
+        //image.setTag(position);
+        image.setTag(getImage(image));
+        /*
         image.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 //para visualizar la imagen
                 Intent viewFinder = new Intent(context, ImageVisualizator.class);
-                viewFinder.putExtra("IMG", imgData[(Integer)v.getTag()]);
+                viewFinder.putExtra("IMG", images.get((Integer)v.getTag()));
+                context.startActivity(viewFinder);
+            }
+        });*/
+        image.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //para visualizar la imagen
+                Intent viewFinder = new Intent(context, ImageVisualizator.class);
+                viewFinder.putExtra("IMG", currentBook.getImg());
                 context.startActivity(viewFinder);
             }
         });
-
         return view;
+    }
+
+    private byte[] getImage(ImageView iv){
+        byte[] imageInByte = null;
+        try {
+            Bitmap bitmap = ((BitmapDrawable) iv.getDrawable()).getBitmap();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            imageInByte = baos.toByteArray();
+            baos.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return imageInByte;
     }
 }

@@ -1,5 +1,5 @@
 #
-# generated on 2019/02/20 10:01:38
+# generated on 2019/02/26 08:30:33
 #
 # --table-start--
 dataClass=com.sarredondo.datasource.Book
@@ -25,6 +25,14 @@ fieldName=language
 # --field-end--
 # --field-start--
 fieldName=publisher
+# --field-end--
+# --field-start--
+fieldName=imgPath
+# --field-end--
+# --field-start--
+fieldName=img
+dataPersister=BYTE_ARRAY
+columnDefinition=LONGBLOB
 # --field-end--
 # --table-fields-end--
 # --table-end--
